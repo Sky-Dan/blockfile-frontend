@@ -1,4 +1,4 @@
-import { Crop, File, Upload } from 'react-feather';
+import { Check, File, Upload } from 'react-feather';
 
 const defaultRoutes = [
   {
@@ -12,6 +12,12 @@ const defaultRoutes = [
     title: 'List Files',
     icon: <File size={20} />,
     navLink: '/list-files',
+  },
+  {
+    id: 'validationFile',
+    title: 'Validation File',
+    icon: <Check size={20} />,
+    navLink: '/validation-file',
   },
   // {
   //   header: 'Menu'

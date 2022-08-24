@@ -11,6 +11,11 @@ const HomeRoutes = [
     exact: true,
     component: lazy(() => import('../../views/list-files/')),
   },
+  {
+    path: '/validation-file',
+    exact: true,
+    component: lazy(() => import('../../views/validation-file/')),
+  },
 ];
 
 export default HomeRoutes;
