@@ -67,7 +67,9 @@
     position: fixed;
     right: 0;
     margin: #{$floating-nav-margin} auto 0;
-    width: calc(100vw - (100vw - 100%) - calc(#{$content-padding} * 2) - #{$menu-expanded-width});
+    width: calc(
+      100vw - (100vw - 100%) - calc(#{$content-padding} * 2) - #{$menu-expanded-width}
+    );
     border-radius: $card-border-radius;
     z-index: 12;
   }
@@ -79,7 +81,7 @@
     left: $menu-expanded-width;
     width: calc(100vw - (100vw - 100%) - #{$sidebar-width});
     background: transparent;
-    box-shadow: none !important; // remove this if removing "menu-shadow" class
+    // box-shadow: none !important; // remove this if removing "menu-shadow" class
   }
 
   // add border to navbar
@@ -293,7 +295,8 @@
           }
 
           img {
-            box-shadow: 0 4px 8px 0 rgba($black, 0.12), 0 2px 4px 0 rgba($black, 0.08);
+            box-shadow: 0 4px 8px 0 rgba($black, 0.12),
+              0 2px 4px 0 rgba($black, 0.08);
           }
         }
 
@@ -395,23 +398,23 @@
   .navbar-container:not(.main-menu-content) {
     padding: 0.8rem 1rem;
   }
-  .header-navbar-shadow {
-    display: block;
-    background: linear-gradient(
-      180deg,
-      hsla(0, 0%, 97.3%, 0.95) 44%,
-      hsla(0, 0%, 97.3%, 0.46) 73%,
-      hsla(0, 0%, 100%, 0)
-    );
-    padding-top: 2.2rem;
-    background-repeat: repeat;
-    width: 100%;
-    height: 102px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 11;
-  }
+  // .header-navbar-shadow {
+  //   display: block;
+  //   background: linear-gradient(
+  //     180deg,
+  //     hsla(0, 0%, 97.3%, 0.95) 44%,
+  //     hsla(0, 0%, 97.3%, 0.46) 73%,
+  //     hsla(0, 0%, 100%, 0)
+  //   );
+  //   padding-top: 2.2rem;
+  //   background-repeat: repeat;
+  //   width: 100%;
+  //   height: 102px;
+  //   position: fixed;
+  //   top: 0;
+  //   left: 0;
+  //   z-index: 11;
+  // }
 }
 
 // Navbar colors
