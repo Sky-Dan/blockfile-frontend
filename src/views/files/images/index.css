@@ -1,0 +1,9 @@
+img {
+    max-width: 300px;
+    max-height: 300px;
+}
+
+.numero-da-imagem {
+    float:right;
+    padding-top:10px
+}

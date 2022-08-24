@@ -1,0 +1,22 @@
+.accordion .accordion-header .accordion-button {
+  font-weight: 500;
+  font-size: 1.1rem;
+  line-height: 1.45;
+}
+
+.accordion-button-p-0 {
+  .accordion-button::after {
+    margin: 0 5px;
+  }
+
+  button {
+    padding: 0px;
+    justify-content: center;
+  }
+}
+
+.accordion-collapse {
+  .accordion-body {
+    padding: 0.42rem 0;
+  }
+}
