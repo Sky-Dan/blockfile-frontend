@@ -9,8 +9,8 @@ import Router from './router/Router';
 import { DefaultRoute } from './router/routes';
 import { handleLogout } from './redux/auth';
 import { getUserData, removeAllLocalstorageAsJson } from './utility/Utils';
-import { checkNetworkId, connectMetamaskWallet } from './utility/web3';
-import web3Config from './configs/web3Config';
+// import { checkNetworkId, connectMetamaskWallet } from './utility/web3';
+// import web3Config from './configs/web3Config';
 import { api } from './services/api';
 
 const App = () => {
@@ -37,17 +37,17 @@ const App = () => {
     // dispatch(handleMenuHidden(isHidden));
   }, []);
 
-  const handleCurrentNetworkId = async () => {
-    const currentNetwork = await checkNetworkId();
+  // const handleCurrentNetworkId = async () => {
+  //   const currentNetwork = await checkNetworkId();
 
-    return currentNetwork;
-  };
+  //   return currentNetwork;
+  // };
 
   const handleNetworkId = async () => {
-    const currentNetwork = handleCurrentNetworkId();
-    if (!(currentNetwork === web3Config.networkId)) {
-      return (window.location.href = '/wrong-network');
-    }
+    // const currentNetwork = handleCurrentNetworkId();
+    // if (!(currentNetwork === web3Config.networkId)) {
+    //   return (window.location.href = '/wrong-network');
+    // }
 
     return (window.location.href = '/');
   };
