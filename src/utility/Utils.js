@@ -36,6 +36,20 @@ export const formatDate = (
   return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value));
 };
 
+export const formatDateHourMinute = (
+  value,
+  formatting = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  }
+) => {
+  if (!value) return value;
+  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value));
+};
+
 // ** Returns short month of passed date
 export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
   const date = new Date(value);
