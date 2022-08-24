@@ -1,5 +1,6 @@
 // ** React Imports
 import { useState, Fragment } from 'react';
+import { api } from '../../../../services/api';
 
 // ** Reactstrap Imports
 import {
@@ -16,7 +17,9 @@ import {
 
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
 import { FileText, X, DownloadCloud } from 'react-feather';
+import { ErrorToast, SuccessToast } from '../../../components/toasts/Error';
 
 const FileUploaderSingle = () => {
   // ** State
@@ -42,6 +45,36 @@ const FileUploaderSingle = () => {
       );
     } else {
       return <FileText size="28" />;
+    }
+  };
+
+  const handleFile = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append('file', files[0]);
+
+      await api.post(`/files`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      toast.success(
+        <SuccessToast description="File upload was successfully" />,
+        {
+          icon: false,
+          hideProgressBar: true,
+        }
+      );
+
+      setFiles([]);
+    } catch (error) {
+      console.log(error);
+      toast.error(<ErrorToast description="There was an error" />, {
+        icon: false,
+        hideProgressBar: true,
+      });
     }
   };
 
@@ -125,7 +158,9 @@ const FileUploaderSingle = () => {
               >
                 Remove All
               </Button>
-              <Button color="primary">Upload Files</Button>
+              <Button color="success" onClick={() => handleFile()}>
+                Upload Files
+              </Button>
             </div>
           </Fragment>
         ) : null}
