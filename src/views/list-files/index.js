@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { api } from '../../services/api';
+import { formatDateHourMinute } from '../../utility/Utils';
 
 const ListFiles = () => {
   const [dados, setDados] = useState();
@@ -26,7 +28,7 @@ const ListFiles = () => {
               <th>Hash</th>
               <th>File Name</th>
               <th>Created At</th>
-              <th>File Url</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -39,16 +41,14 @@ const ListFiles = () => {
                   <p className="card-text text-wrap">{data.file}</p>
                 </td>
                 <td>
-                  <p className="card-text text-wrap">{data.created_at}</p>
+                  <p className="card-text text-wrap">
+                    {formatDateHourMinute(data.created_at)}
+                  </p>
                 </td>
                 <td>
-                  <a
-                    className="card-text text-wrap"
-                    href={data.file_url}
-                    target="_blank"
-                  >
-                    Link
-                  </a>
+                  <Link to={`/file-details/${data.hash}`} className="">
+                    More Details
+                  </Link>
                 </td>
               </tr>
             ))}
