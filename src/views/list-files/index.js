@@ -42,7 +42,13 @@ const ListFiles = () => {
                   <p className="card-text text-wrap">{data.created_at}</p>
                 </td>
                 <td>
-                  <p className="card-text text-wrap">{data.file_url}</p>
+                  <a
+                    className="card-text text-wrap"
+                    href={data.file_url}
+                    target="_blank"
+                  >
+                    Link
+                  </a>
                 </td>
               </tr>
             ))}
