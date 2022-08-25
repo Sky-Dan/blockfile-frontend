@@ -33,7 +33,7 @@ const ListFiles = () => {
           </thead>
           <tbody>
             {dados.map((data) => (
-              <tr>
+              <tr key={data.file}>
                 <td>
                   <p className="card-text text-wrap">{data.hash}</p>
                 </td>
