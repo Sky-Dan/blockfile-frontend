@@ -1,6 +1,6 @@
 // ** React Imports
 import { useState, Fragment } from 'react';
-// import { api } from '../../../../services/api';
+import { api } from '../../../../services/api';
 
 // ** Reactstrap Imports
 import {
@@ -15,21 +15,26 @@ import {
   Input,
 } from 'reactstrap';
 
+import Spinner from '@components/spinner/Loading-spinner';
+
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { FileText, X, DownloadCloud } from 'react-feather';
-// import { ErrorToast, SuccessToast } from '../../../components/toasts/Error';
+import { ErrorToast, SuccessToast } from '../../../components/toasts/Error';
 
 const FileUploaderValidation = () => {
   // ** State
   const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
     onDrop: (acceptedFiles) => {
-      setFiles([...files, ...acceptedFiles.map((file) => Object.assign(file))]);
+      setFiles([...acceptedFiles.map((file) => Object.assign(file))]);
     },
+
+    accept: 'image/jpeg,image/jpg,image/png',
   });
 
   const renderFilePreview = (file) => {
@@ -48,35 +53,41 @@ const FileUploaderValidation = () => {
     }
   };
 
-  //   const handleFile = async () => {
-  //     try {
-  //       const formData = new FormData();
+  const handleFile = async () => {
+    try {
+      setLoading(true);
 
-  //       formData.append('file', files[0]);
+      const formData = new FormData();
 
-  //       await api.post(`/files`, formData, {
-  //         headers: {
-  //           'Content-Type': 'multipart/form-data',
-  //         },
-  //       });
+      formData.append('file', files[0]);
 
-  //       toast.success(
-  //         <SuccessToast description="File upload was successfully" />,
-  //         {
-  //           icon: false,
-  //           hideProgressBar: true,
-  //         }
-  //       );
+      const file = await api.post(`/files/validate`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-  //       setFiles([]);
-  //     } catch (error) {
-  //       console.log(error);
-  //       toast.error(<ErrorToast description="There was an error" />, {
-  //         icon: false,
-  //         hideProgressBar: true,
-  //       });
-  //     }
-  //   };
+      console.log(file.data.hash);
+
+      toast.success(
+        <SuccessToast description="File validate was successfully" />,
+        {
+          icon: false,
+          hideProgressBar: true,
+        }
+      );
+
+      setFiles([]);
+    } catch (error) {
+      console.log(error);
+      toast.error(<ErrorToast description="There was an error" />, {
+        icon: false,
+        hideProgressBar: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleRemoveFile = (file) => {
     const uploadedFiles = files;
@@ -126,44 +137,49 @@ const FileUploaderValidation = () => {
         <CardTitle tag="h4">Validate your file</CardTitle>
       </CardHeader>
       <CardBody>
-        <div {...getRootProps({ className: 'dropzone' })}>
-          <input {...getInputProps()} />
-          <div className="d-flex align-items-center justify-content-center flex-column">
-            <DownloadCloud size={64} />
-            <h5>Drop Files here or click to upload</h5>
-            <p className="text-secondary">
-              Drop files here or click{' '}
-              <a href="/" onClick={(e) => e.preventDefault()}>
-                browse
-              </a>{' '}
-              thorough your machine
-            </p>
-          </div>
-        </div>
-        {files.length ? (
-          <Fragment>
-            <ListGroup className="my-2">{fileList}</ListGroup>
-            <div className="d-flex justify-content-end">
-              <Button
-                className="me-1"
-                color="danger"
-                outline
-                onClick={handleRemoveAllFiles}
-              >
-                Remove All
-              </Button>
-              <Button color="success">Upload Files</Button>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <div {...getRootProps({ className: 'dropzone' })}>
+              <input {...getInputProps()} />
+              <div className="d-flex align-items-center justify-content-center flex-column">
+                <DownloadCloud size={64} />
+                <h5>Drop Files here or click to upload</h5>
+                <p className="text-secondary">
+                  Drop files here or click{' '}
+                  <a href="/" onClick={(e) => e.preventDefault()}>
+                    browse
+                  </a>{' '}
+                  thorough your machine
+                </p>
+              </div>
             </div>
-          </Fragment>
-        ) : null}
-        {/* <div className="d-flex justify-content-between">
-          <Button.Ripple className="m-1" color="danger">
-            Cancel
-          </Button.Ripple>
-          <Button.Ripple className="m-1" color="success">
-            Upload
-          </Button.Ripple>
-        </div> */}
+            {files.length ? (
+              <Fragment>
+                <ListGroup className="my-2">{fileList}</ListGroup>
+                <div className="d-flex justify-content-end">
+                  <Button
+                    disabled={loading}
+                    className="me-1"
+                    color="danger"
+                    outline
+                    onClick={handleRemoveAllFiles}
+                  >
+                    Remove All
+                  </Button>
+                  <Button
+                    disabled={loading}
+                    color="success"
+                    onClick={() => handleFile()}
+                  >
+                    Validate File
+                  </Button>
+                </div>
+              </Fragment>
+            ) : null}
+          </>
+        )}
       </CardBody>
     </Card>
   );

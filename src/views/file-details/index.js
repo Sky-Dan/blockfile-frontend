@@ -44,16 +44,17 @@ const FileDetails = () => {
           <Col md="7" xs="12">
             <CardText>
               <CardText>
+                <h5>TX: </h5>
+                <a
+                  href={`https://polygonscan.com/tx/${file?.tx}`}
+                  target="_blank"
+                >
+                  {file?.tx}
+                </a>
+              </CardText>
+              <CardText>
                 <h5>Hash: </h5>
                 {file?.hash}
-              </CardText>
-              <CardText>
-                <h5>TX: </h5>
-                {file?.tx}
-              </CardText>
-              <CardText>
-                <h5>ID: </h5>
-                {file?.id}
               </CardText>
               <h5>Name File: </h5>
               {file?.file}
