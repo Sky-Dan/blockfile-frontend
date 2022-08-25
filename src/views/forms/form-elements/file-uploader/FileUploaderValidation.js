@@ -14,6 +14,9 @@ import {
   Label,
   Input,
 } from 'reactstrap';
+import Web3 from 'web3';
+
+import StorageContract from '../../../../build/artifacts/contracts/Storage.sol/Storage.json';
 
 import Spinner from '@components/spinner/Loading-spinner';
 
@@ -22,6 +25,10 @@ import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
 import { FileText, X, DownloadCloud } from 'react-feather';
 import { ErrorToast, SuccessToast } from '../../../components/toasts/Error';
+
+const contractAddress = process.env.REACT_APP_API_CONTRACT_ADDRESS;
+// const accountAddress = process.env.REACT_APP_API_ACCOUNT_ADDRESS;
+// const privateKey = process.env.REACT_APP_API_PRIVATE_KEY;
 
 const FileUploaderValidation = () => {
   // ** State
@@ -53,6 +60,36 @@ const FileUploaderValidation = () => {
     }
   };
 
+  const web3 = new Web3(
+    'https://polygon-mainnet.g.alchemy.com/v2/gwEXFe136JujTW6BSlbw0aFDkEiL7IH6'
+  );
+
+  const contract = new web3.eth.Contract(StorageContract.abi, contractAddress);
+
+  const handleValidateFile = async (hash) => {
+    const transaction = await contract.methods.validate(hash).call();
+
+    return transaction;
+
+    // const transaction = web3.eth.sendSignedTransaction(
+    //   signedTx.rawTransaction,
+    //   function (error, hash) {
+    //     if (!error) {
+    //       console.log(
+    //         '🎉 The hash of your transaction is: ',
+    //         hash,
+    //         "\n Check Alchemy's, to view the status of your transaction!"
+    //       );
+    //     } else {
+    //       console.log(
+    //         '❗Something went wrong while submitting your transaction:',
+    //         error
+    //       );
+    //     }
+    //   }
+    // );
+  };
+
   const handleFile = async () => {
     try {
       setLoading(true);
@@ -67,15 +104,19 @@ const FileUploaderValidation = () => {
         },
       });
 
-      console.log(file.data.hash);
+      const transaction = await handleValidateFile(file.data.hash);
 
-      toast.success(
-        <SuccessToast description="File validate was successfully" />,
-        {
+      if (transaction) {
+        toast.success(<SuccessToast description="File is valid" />, {
           icon: false,
           hideProgressBar: true,
-        }
-      );
+        });
+      } else {
+        toast.error(<ErrorToast description="File is invalid" />, {
+          icon: false,
+          hideProgressBar: true,
+        });
+      }
 
       setFiles([]);
     } catch (error) {
