@@ -202,7 +202,7 @@ const FileUploaderSingle = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle tag="h4">Upload your contract to the blockchain</CardTitle>
+        <CardTitle tag="h4">Upload your file to the blockchain</CardTitle>
       </CardHeader>
       <CardBody>
         {loading ? (
