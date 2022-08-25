@@ -8,8 +8,8 @@ const themeConfig = {
   },
   layout: {
     isRTL: false,
-    skin: 'dark', // light, dark, bordered, semi-dark
-    routerTransition: 'fadeIn', // fadeIn, fadeInLeft, zoomIn, none or check this for more transition https://animate.style/
+    skin: 'semi-dark', // light, dark, bordered, semi-dark
+    routerTransition: 'fadeInLeft', // fadeIn, fadeInLeft, zoomIn, none or check this for more transition https://animate.style/
     type: 'vertical', // vertical, horizontal
     contentWidth: 'boxed', // full, boxed
     menu: {
@@ -18,7 +18,7 @@ const themeConfig = {
     },
     navbar: {
       // ? For horizontal menu, navbar type will work for navMenu type
-      type: 'floating', // static , sticky , floating, hidden
+      type: 'static', // static , sticky , floating, hidden
       backgroundColor: 'white', // BS color options [primary, success, etc]
     },
     footer: {
