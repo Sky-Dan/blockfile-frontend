@@ -15,7 +15,7 @@ const defaultRoutes = [
   },
   {
     id: 'validationFile',
-    title: 'Validation File',
+    title: 'File Validation',
     icon: <Check size={20} />,
     navLink: '/validation-file',
   },
