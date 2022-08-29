@@ -1,9 +1,11 @@
 // ** React Imports
-import { Suspense, lazy, Fragment } from 'react';
+import { Suspense, lazy, Fragment, useContext } from 'react';
 
 // ** Utils
 import { useLayout } from '@hooks/useLayout';
 import { useRouterTransition } from '@hooks/useRouterTransition';
+import { isUserLoggedIn } from '../utility/Utils';
+import { AbilityContext } from '@src/utility/context/Can';
 
 // ** Custom Components
 import LayoutWrapper from '@layouts/components/layout-wrapper';
@@ -30,7 +32,7 @@ const Router = () => {
   const { transition, setTransition } = useRouterTransition();
 
   // ** ACL Ability Context
-  // const ability = useContext(AbilityContext)
+  const ability = useContext(AbilityContext);
 
   // ** Default Layout
   const DefaultLayout =
@@ -65,6 +67,10 @@ const Router = () => {
 
   const WrongNetwork = lazy(() => import('@src/views/pages/misc/WrongNetwork'));
 
+  const NotAuthorized = lazy(() =>
+    import('@src/views/pages/misc/NotAuthorized')
+  );
+
   // ** Init Error Component
   const Error = lazy(() => import('@src/views/pages/misc/Error'));
 
@@ -73,38 +79,50 @@ const Router = () => {
    */
   const FinalRoute = (props) => {
     const route = props.route;
-    console.log(route);
-    // let action, resource
+    let action, resource;
 
     // ** Assign vars based on route meta
-    // if (route.meta) {
-    //   action = route.meta.action ? route.meta.action : null
-    //   resource = route.meta.resource ? route.meta.resource : null
-    // }
 
-    return <route.component {...props} />;
+    if (route.meta) {
+      action = route.meta.action ? route.meta.action : null;
+      resource = route.meta.resource ? route.meta.resource : null;
+    }
 
-    // if (
-    //   (!isUserLoggedIn() && route.meta === undefined) ||
-    //   (!isUserLoggedIn() && route.meta && !route.meta.authRoute && !route.meta.publicRoute)
-    // ) {
-    //   /**
-    //    ** If user is not Logged in & route meta is undefined
-    //    ** OR
-    //    ** If user is not Logged in & route.meta.authRoute, !route.meta.publicRoute are undefined
-    //    ** Then redirect user to login
-    //    */
+    // return <route.component {...props} />;
 
-    //   return <Redirect to='/login' />
-    // } else if (route.meta && route.meta.authRoute && isUserLoggedIn()) {
-    //   // ** If route has meta and authRole and user is Logged in then redirect user to home page (DefaultRoute)
-    // } else if (isUserLoggedIn() && !ability.can(action || 'read', resource)) {
-    //   // ** If user is Logged in and doesn't have ability to visit the page redirect the user to Not Authorized
-    //   return <Redirect to='/misc/not-authorized' />
-    // } else {
-    //   // ** If none of the above render component
-    //   return <route.component {...props} />
-    // }
+    if (
+      (!isUserLoggedIn() && route.meta === undefined) ||
+      (!isUserLoggedIn() &&
+        route.meta &&
+        !route.meta.authRoute &&
+        !route.meta.publicRoute)
+    ) {
+      //   /**
+      //    ** If user is not Logged in & route meta is undefined
+      //    ** OR
+      //    ** If user is not Logged in & route.meta.authRoute, !route.meta.publicRoute are undefined
+      //    ** Then redirect user to login
+      //    */
+      return <Redirect to="/login" />;
+    } else if (route.meta && route.meta.authRoute && isUserLoggedIn()) {
+      //   // ** If route has meta and authRole and user is Logged in then redirect user to home page (DefaultRoute)
+      return <Redirect to="/bem-vindo" />;
+    } else if (!!isUserLoggedIn() && !ability.can(action || 'read', resource)) {
+      // ** If user is Logged in and doesn't have ability to visit the page redirect the user to Not Authorized
+      return <Redirect to="/misc/not-authorized" />;
+    } else if (
+      route.meta &&
+      route.meta.authRoute &&
+      isUserLoggedIn() &&
+      window.location.pathname === '/'
+    ) {
+      return <Redirect to="/dash" />;
+    } else {
+      //   // ** If none of the above render component
+
+      //localStorage.removeItem('@decentraFrontend:userData');
+      return <route.component {...props} />;
+    }
   };
 
   // ** Return Route to Render
@@ -204,16 +222,27 @@ const Router = () => {
   return (
     <AppRouter basename={process.env.REACT_APP_BASENAME}>
       <Switch>
-        {/* <Route
+        <Route
           exact
-          path="/wrong-network"
+          path="/"
+          render={() => {
+            return isUserLoggedIn() ? (
+              <Redirect to={DefaultRoute} />
+            ) : (
+              <Redirect to="/login" />
+            );
+          }}
+        />
+        {/* Not Auth Route */}
+        <Route
+          exact
+          path="/misc/not-authorized"
           render={() => (
             <Layouts.BlankLayout>
-              <WrongNetwork />
+              <NotAuthorized />
             </Layouts.BlankLayout>
           )}
-        /> */}
-
+        />
         {ResolveRoutes()}
 
         {/* NotFound Error page */}

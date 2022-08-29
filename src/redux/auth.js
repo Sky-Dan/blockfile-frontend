@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import { api } from '../services/api';
 
 // ** Redux Imports
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
@@ -8,7 +9,7 @@ import { ErrorToast, SuccessToast } from '../views/components/toasts/Error';
 import { removeLocalstorageAsJson } from '../utility/Utils';
 
 const initialUser = () => {
-  const item = window.localStorage.getItem('userData');
+  const item = window.localStorage.getItem('@blockfile:userData');
   //** Parse stored json or if none return initialValue
   return item ? JSON.parse(item) : {};
 };
@@ -17,7 +18,31 @@ export const handleConnect = createAsyncThunk(
   'auth/handleConnect',
   async ({ userData }) => {
     try {
-      saveLocalstorageAsJson('userData', userData);
+      let response = {
+        ...userData,
+        user: {
+          ...userData.user,
+          ability: [
+            {
+              action: 'manage',
+              subject: 'all',
+            },
+          ],
+        },
+      };
+
+      if (userData.kind === 'defaultUser') {
+        const user = await api.post('/sessions', {
+          email: userData.email,
+          password: userData.password,
+        });
+
+        response = {
+          ...user.data,
+        };
+      }
+
+      saveLocalstorageAsJson('@blockfile:userData', response);
 
       window.location.href = '/';
 
@@ -26,13 +51,16 @@ export const handleConnect = createAsyncThunk(
         hideProgressBar: true,
       });
 
-      return userData;
+      return response;
     } catch (error) {
       console.error(error);
-      toast.error(<ErrorToast description="Error, there was an error " />, {
-        icon: false,
-        hideProgressBar: true,
-      });
+      toast.error(
+        <ErrorToast description="Error, email or password invalid " />,
+        {
+          icon: false,
+          hideProgressBar: true,
+        }
+      );
     }
   }
 );
@@ -49,7 +77,7 @@ export const authSlice = createSlice({
     handleLogout: (state) => {
       state.userData = {};
       state.isConnected = false;
-      removeLocalstorageAsJson('userData');
+      removeLocalstorageAsJson('@blockfile:userData');
 
       window.location.href = '/';
       toast.success(<SuccessToast description="Disconnected with success " />, {

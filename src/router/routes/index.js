@@ -5,7 +5,7 @@ import HomeRoutes from './Home';
 const TemplateTitle = '%s - BRAND';
 
 // ** Default Route
-const DefaultRoute = '/';
+const DefaultRoute = '/dash';
 
 // ** Merge Routes
 const Routes = [...HomeRoutes];

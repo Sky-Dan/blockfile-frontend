@@ -2,10 +2,24 @@ import { lazy } from 'react';
 
 const HomeRoutes = [
   {
-    path: '/',
+    path: '/login',
+    exact: true,
+    component: lazy(() => import('../../views/login')),
+    layout: 'BlankLayout',
+    meta: {
+      authRoute: true,
+    },
+  },
+  {
+    path: '/dash',
     exact: true,
     component: lazy(() => import('../../views/dashboard/')),
+    meta: {
+      action: 'defaultUser',
+      resource: 'all',
+    },
   },
+
   {
     path: '/list-files',
     exact: true,
