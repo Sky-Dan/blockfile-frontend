@@ -41,7 +41,7 @@ const FileUploaderSingle = () => {
     onDrop: (acceptedFiles) => {
       setFiles([...acceptedFiles.map((file) => Object.assign(file))]);
     },
-    accept: 'image/jpeg,image/jpg,image/png',
+    accept: 'image/jpeg,image/jpg,image/png,application/pdf',
   });
 
   const renderFilePreview = (file) => {
