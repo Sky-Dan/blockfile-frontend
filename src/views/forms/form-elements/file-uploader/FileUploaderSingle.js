@@ -33,6 +33,7 @@ const privateKey = process.env.REACT_APP_API_PRIVATE_KEY;
 const FileUploaderSingle = () => {
   // ** State
   const [files, setFiles] = useState([]);
+  const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -122,6 +123,7 @@ const FileUploaderSingle = () => {
       const formData = new FormData();
 
       formData.append('file', files[0]);
+      formData.append('comment', comment);
 
       const file = await api.post(`/files`, formData, {
         headers: {
@@ -228,7 +230,12 @@ const FileUploaderSingle = () => {
               <Label className="form-label" for="basicInput">
                 Comment
               </Label>
-              <Input type="email" id="basicInput" placeholder="Set anotation" />
+              <Input
+                type="text"
+                value={comment}
+                placeholder="Set anotation"
+                onChange={(e) => setComment(e.target.value)}
+              />
             </div>
             {files.length ? (
               <Fragment>

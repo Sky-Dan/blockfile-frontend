@@ -72,6 +72,10 @@ const FileDetails = () => {
               </a>
             </CardText>
             <CardText>
+              <h5>Comment: </h5>
+              {file?.comment}
+            </CardText>
+            <CardText>
               <h5>Created At: </h5>
               {formatDateHourMinute(file?.created_at)}
             </CardText>
