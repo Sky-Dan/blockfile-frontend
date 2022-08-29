@@ -138,9 +138,10 @@ const FileUploaderSingle = () => {
           },
         }),
       ]).then((values) => {
+        console.log(values);
         api.put(`/files/${file.data.file.hash}`, {
-          tx: values[0].value.transactionHash,
-          ipfs_url: values[1].value.data.cid,
+          tx: (values[0].value && values[0].value.transactionHash) || '',
+          ipfs_url: (values[1].value && values[1].value.data.cid) || '',
         });
       });
 
