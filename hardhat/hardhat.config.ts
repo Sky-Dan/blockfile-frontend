@@ -21,7 +21,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {},
     matic: {
-      url: 'https://polygon-mainnet.g.alchemy.com/v2/gwEXFe136JujTW6BSlbw0aFDkEiL7IH6',
+      url: 'https://polygon-mainnet.g.alchemy.com/v2/Wg4nVqlhztEcJ_7diz8kMF4jsFLYCh6t',
       accounts: [process.env.PRIVATE_KEY || ''],
     },
     mumbai: {

@@ -6,8 +6,6 @@ contract Storage {
 
     address public owner;
 
-    uint public storeAmount = 0.1 ether;
-
     struct Hash { 
         string hash;
         uint timestamp;
@@ -36,8 +34,6 @@ contract Storage {
     }
 
     function store(string memory hash) public payable {
-        require(msg.value == storeAmount, "Invalid amount");
-
         require(!validate(hash), "Hash already exists");
 
         hashs.push(Hash({ hash: hash, timestamp: block.timestamp }));

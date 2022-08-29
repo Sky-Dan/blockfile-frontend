@@ -1,6 +1,7 @@
 // ** React Imports
 import { useState, Fragment } from 'react';
 import { api } from '../../../../services/api';
+import { ipfsApi } from '../../../../services/api/ipfsApi';
 
 // ** Reactstrap Imports
 import {
@@ -61,7 +62,7 @@ const FileUploaderSingle = () => {
   };
 
   const web3 = new Web3(
-    'https://polygon-mainnet.g.alchemy.com/v2/gwEXFe136JujTW6BSlbw0aFDkEiL7IH6'
+    'https://polygon-mainnet.g.alchemy.com/v2/Wg4nVqlhztEcJ_7diz8kMF4jsFLYCh6t'
   );
 
   const contract = new web3.eth.Contract(StorageContract.abi, contractAddress);
@@ -71,10 +72,8 @@ const FileUploaderSingle = () => {
 
     // const block = await web3.eth.getBlock('latest');
 
-    const nonce =
-      (await web3.eth.getTransactionCount(accountAddress, 'pending')) + 1;
-
-    console.log(nonce);
+    // const nonce =
+    //   (await web3.eth.getTransactionCount(accountAddress, 'pending')) + 1;
 
     const tx = {
       from: accountAddress,
@@ -131,12 +130,18 @@ const FileUploaderSingle = () => {
         },
       });
 
-      const transaction = await handleStoreFile(file.data.file.hash);
-
-      console.log(transaction);
-
-      await api.put(`/files/${file.data.file.hash}`, {
-        tx: transaction.transactionHash,
+      Promise.allSettled([
+        handleStoreFile(file.data.file.hash),
+        ipfsApi.post(`/file`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }),
+      ]).then((values) => {
+        api.put(`/files/${file.data.file.hash}`, {
+          tx: values[0].value.transactionHash,
+          ipfs_url: values[1].value.data.cid,
+        });
       });
 
       toast.success(
