@@ -78,7 +78,7 @@ const FileUploaderSingle = () => {
     const tx = {
       from: accountAddress,
       to: contractAddress,
-      value: web3.utils.toHex(web3.utils.toWei('0.1', 'ether')),
+      value: web3.utils.toHex(web3.utils.toWei('0', 'ether')),
       gas: web3.utils.toHex(210000),
       // gasPrice: web3.utils.toHex(210000),
       // gasLimit: block.gasLimit,
@@ -137,9 +137,9 @@ const FileUploaderSingle = () => {
             'Content-Type': 'multipart/form-data',
           },
         }),
-      ]).then((values) => {
+      ]).then(async (values) => {
         console.log(values);
-        api.put(`/files/${file.data.file.hash}`, {
+        await api.put(`/files/${file.data.file.hash}`, {
           tx: (values[0].value && values[0].value.transactionHash) || '',
           ipfs_url: (values[1].value && values[1].value.data.cid) || '',
         });
