@@ -67,7 +67,10 @@ const FileDetails = () => {
             </CardText>
             <CardText>
               <h5>IPFS URL: </h5>
-              <a href={file?.ipfs_url} target="_blank">
+              <a
+                href={`https://ipfs.io/ipfs/${file?.ipfs_url}`}
+                target="_blank"
+              >
                 {file?.ipfs_url}
               </a>
             </CardText>
