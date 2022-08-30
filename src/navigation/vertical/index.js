@@ -5,7 +5,7 @@ const defaultRoutes = [
     id: 'upload',
     title: 'Upload',
     icon: <Upload size={20} />,
-    navLink: '/',
+    navLink: '/dash',
   },
   {
     id: 'listFile',
