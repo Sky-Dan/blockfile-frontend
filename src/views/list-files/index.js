@@ -25,8 +25,8 @@ const ListFiles = () => {
         <Table responsive>
           <thead>
             <tr>
-              <th>Hash</th>
               <th>File Name</th>
+              <th>Description</th>
               <th>Created At</th>
               <th>Actions</th>
             </tr>
@@ -35,18 +35,18 @@ const ListFiles = () => {
             {dados.map((data) => (
               <tr key={data.file}>
                 <td>
-                  <p className="card-text text-wrap">{data.hash}</p>
+                  <p className="card-text text-wrap">{data?.file}</p>
                 </td>
                 <td>
-                  <p className="card-text text-wrap">{data.file}</p>
+                  <p className="card-text text-wrap">{data?.description}</p>
                 </td>
                 <td>
                   <p className="card-text text-wrap">
-                    {formatDateHourMinute(data.created_at)}
+                    {formatDateHourMinute(data?.created_at)}
                   </p>
                 </td>
                 <td>
-                  <Link to={`/file-details/${data.hash}`} className="">
+                  <Link to={`/file-details/${data?.hash}`} className="">
                     More Details
                   </Link>
                 </td>

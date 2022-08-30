@@ -75,8 +75,8 @@ const FileDetails = () => {
               </a>
             </CardText>
             <CardText>
-              <h5>Comment: </h5>
-              {file?.comment}
+              <h5>Description: </h5>
+              {file?.description}
             </CardText>
             <CardText>
               <h5>Created At: </h5>
