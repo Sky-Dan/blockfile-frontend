@@ -11,7 +11,7 @@ const FileDetails = () => {
 
   const handleFile = async () => {
     try {
-      const response = await api.get(`/files/${hash}`);
+      const response = await api.get(`/files/${hash}/hash`);
       console.log(response);
       setFile(response.data.file);
     } catch (error) {
